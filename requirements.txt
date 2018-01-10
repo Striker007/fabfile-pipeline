@@ -1,0 +1,5 @@
+fabric
+pycurl
+Jinja2
+pyyaml
+pytest
