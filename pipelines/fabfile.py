@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-import os
+import os, sys
 
 from fabric.api import (
     env, task, roles, execute
@@ -35,13 +35,13 @@ def deploy_main():
 """Global Variables:"""
 env.roledefs = {"proxy": [env.ip]}
 ARCHIVE_PATH = os.path.join(os.curdir, "go_pipe_deploy.tar")
-CODE_DIR = local_current_release_dir = os.pardir
+CODE_DIR = local_current_release_dir = os.path.join(os.pardir, env.codedir)
 REMOTE_DIR = "/data/ggg"
 REMOTE_RELEASE_DIR = os.path.join(REMOTE_DIR, "releases", str(timestamp))
 REMOTE_CURRENT_RELEASE_LINK = os.path.join(REMOTE_DIR, "current")
 
 # config = load_yaml_config(env.deploy_config, env.environment)
-pack_code(CODE_DIR, ARCHIVE_PATH)
+pack_code(CODE_DIR, ARCHIVE_PATH, 'fabfile-pipeline')
 
 
 if __name__ == '__main__':

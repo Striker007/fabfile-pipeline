@@ -25,12 +25,15 @@ def dir_create_remote_structure(working_dir):
     return working_dir
 
 
-def pack_code(src, dst):
+def pack_code(src, dst, exclude=None):
     if src != "" and dst != "":
         print("pack code")
         with cd(src):
             local("rm -f {0}".format(dst))
-            local("tar -cf {dst} --exclude='.git*' --exclude='fabfile-pipeline' -C {src} .".format(src=src, dst=dst))
+            excluded = ""
+            if exclude:
+                excluded = "--exclude='{}'".format(exclude)
+            local("tar -cf {dst} --exclude='.git*' {exc}  -C {src} .".format(src=src, dst=dst, exc=excluded))
 
 
 def upload_unpack_code(local_path_to_archive, remote_dir):
