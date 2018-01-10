@@ -4,7 +4,7 @@ from __future__ import print_function
 import os, sys
 
 from fabric.api import (
-    env, task, roles, execute
+    env, task, roles, execute, lcd, local
 )
 
 from utils.main import (
@@ -18,6 +18,12 @@ def rsync_code():
 
 
 @task()
+def test():
+    with lcd(env.testdir):
+        local("make test")
+
+
+@task()
 @roles('proxy')
 def deploy_proxy():
     print('deploy proxy')
@@ -27,9 +33,13 @@ def deploy_proxy():
 
 
 @task(default=True)
-def deploy_main():
+def deploy():
+    preperation()
     execute(deploy_proxy)
 
+
+def preperation():
+    pack_code(CODE_DIR, ARCHIVE_PATH, 'fabfile-pipeline')
 
 # COMMON
 """Global Variables:"""
@@ -39,9 +49,6 @@ CODE_DIR = local_current_release_dir = os.path.join(os.pardir, env.codedir)
 REMOTE_DIR = "/data/ggg"
 REMOTE_RELEASE_DIR = os.path.join(REMOTE_DIR, "releases", str(timestamp))
 REMOTE_CURRENT_RELEASE_LINK = os.path.join(REMOTE_DIR, "current")
-
-# config = load_yaml_config(env.deploy_config, env.environment)
-pack_code(CODE_DIR, ARCHIVE_PATH, 'fabfile-pipeline')
 
 
 if __name__ == '__main__':
