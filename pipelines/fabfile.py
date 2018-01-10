@@ -4,7 +4,7 @@ from __future__ import print_function
 import os
 
 from fabric.api import (
-    task, roles, execute
+    env, task, roles, execute
 )
 
 from utils.main import (
@@ -33,6 +33,7 @@ def deploy_main():
 
 # COMMON
 """Global Variables:"""
+env.roledefs = {"proxy": [env.ip]}
 ARCHIVE_PATH = os.path.join(os.curdir, "go_pipe_deploy.tar")
 CODE_DIR = local_current_release_dir = os.pardir
 REMOTE_DIR = "/data/ggg"
